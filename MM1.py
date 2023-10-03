@@ -118,4 +118,4 @@ transmission_rate = 1000000
 K = None
 
 simulator = MM1QueueSimulator(T, arrival_rate, average_package_length, transmission_rate, K)
-print(simulator.run_simulation())
+#print(simulator.run_simulation())
