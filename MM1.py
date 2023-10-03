@@ -2,124 +2,120 @@ import random
 import math
 import queue
 
-# Define simulation time (T) and arrival rate (lambda)
-T = 1000  # Adjust the simulation time as needed
-arrival_rate = 400.0  # Packets per second
+class MM1QueueSimulator:
+    def __init__(self, T, arrival_rate, average_package_length, transmission_rate, K=None):
+        self.T = T
+        self.arrival_rate = arrival_rate
+        self.average_package_length = average_package_length
+        self.transmission_rate = transmission_rate
+        self.K = K
 
-# Define service rate (mu)
-average_package_length = 2000  # Packets per second
+        self.clock = 0
+        self.arrival_events = queue.Queue()
+        self.events = []
 
-transmission_rate = 1000000 # bits per second
+    def generate_exponential(self, lambda_param):
+        u = random.random()
+        return -math.log(1 - u) / lambda_param
 
-# For M/M/1/K queue, define the buffer size (K)
-K = None  # Set to None for M/M/1 queue, or a positive integer for M/M/1/K queue
+    def generate_packet_arrivals(self):
+        while self.clock < self.T:
+            interarrival_time = self.generate_exponential(self.arrival_rate)
+            self.clock += interarrival_time
 
-# Initialize simulation clock and other variables
-clock = 0
+            packet = {
+                'type': "arrival",
+                'time': self.clock,
+            }
 
-packet_counter = 0  # Counter to keep track of packet arrivals
+            self.events.append(packet)
+            self.arrival_events.put(packet)
 
-arrival_events = queue.Queue() # List to store arrival events
+    def generate_departures(self):
 
-events = []
+        self.clock = 0
 
-# Function to generate exponential random variable
-def generate_exponential(lambda_param):
-    u = random.random()  # Generate a random floating-point number between 0 and 1
-    return -math.log(1 - u) / lambda_param
+        while not self.arrival_events.empty():
+            curr_event = self.arrival_events.get()
 
-# Generate packet arrivals
-while clock < T:
-    interarrival_time = generate_exponential(arrival_rate)
-    clock += interarrival_time
-    packet_counter += 1
+            if self.clock < curr_event["time"]:
+                self.clock = curr_event["time"]
 
-    # Create packet and add it to the queue
-    packet = {
-        'type': "arrival",
-        'time': clock,
-    }
+            package_length = self.generate_exponential(1 / self.average_package_length)
+            service_time = package_length / self.transmission_rate
 
-    events.append(packet)
+            self.clock += service_time
 
-    arrival_events.put(packet)
+            packet = {
+                "type": "departure",
+                'time': self.clock
+            }
+
+            self.events.append(packet)
 
 
-departure_events = []
 
-clock = 0
+    def generate_observers(self):
 
-while not arrival_events.empty():
+        self.clock = 0
+        observer_average = 5 * arrival_rate
+        while self.clock < T:
+            observer_time = self.generate_exponential(observer_average)
+            self.clock += observer_time
 
-    #for each arrival event, generate a departure event
-    curr_event = arrival_events.get()
+            self.events.append({
+                "type": "observer",
+                'time': self.clock
+            })
 
-    # departure time cannot be less than arrival time
-    if clock < curr_event["time"]:
-        clock = curr_event["time"]
+    def run_simulation(self):
+        self.generate_packet_arrivals()
+        self.generate_departures()
+        self.generate_observers()
+        self.events.sort(key = lambda x: x["time"])
 
-    package_length = generate_exponential(1/average_package_length)
+        Na = 0  # Number of Arrivals
+        Nd = 0  # Number of departures
+        No = 0  # Number of observers
 
-    service_time = package_length/transmission_rate
+        total_idle_time = 0
+        sum_queue_length_observed = 0
 
-    #departure_time of next packat start after the end of the current packet
-    clock += service_time
+        prev_idle = 0
+        prev_idle_time = 0
 
-    packet = {
-        "type": "departure",
-        'time': clock
-    }
-
-    events.append(packet)
-
-    packet_counter -= 1
-
-clock = 0
-# Generate observer events
-observer_average = 5 * arrival_rate  # Adjust the rate of observer events as needed
-while clock < T:
-    observer_time = generate_exponential(observer_average)
-    clock += observer_time
-
-    events.append({
-        "type": "observer",
-        'time': clock
-    })
-events.sort(key = lambda x: x["time"])
-
-Na = 0 #Number of Arrivals
-Nd = 0 #Number of departures
-No = 0 #Number of observers
-
-total_idle_time = 0
-sum_queue_length_observed = 0
-
-prev_idle = 0
-prev_idle_time = 0
-
-for event in events:
-    if event["type"] == "arrival":
-        Na += 1
-    elif event["type"] == "departure":
-        Nd += 1
-    else:
-        if Na == Nd:
-            #server is idle
-            if prev_idle == 1:
-                total_idle_time += event["time"] - prev_idle_time
+        for event in self.events:
+            if event["type"] == "arrival":
+                Na += 1
+            elif event["type"] == "departure":
+                Nd += 1
             else:
-                total_idle_time += (event["time"] - prev_idle_time) / 2
-            prev_idle = 1
-            prev_idle_time = event["time"]
-        else:
-            prev_idle = 1
-            prev_idle_time = event["time"]
+                if Na == Nd:
+                    # server is idle
+                    if prev_idle == 1:
+                        total_idle_time += event["time"] - prev_idle_time
+                    else:
+                        total_idle_time += (event["time"] - prev_idle_time) / 2
+                    prev_idle = 1
+                    prev_idle_time = event["time"]
+                else:
+                    prev_idle = 1
+                    prev_idle_time = event["time"]
 
-        sum_queue_length_observed += abs(Na-Nd)
-        No += 1
+                sum_queue_length_observed += abs(Na - Nd)
+                No += 1
 
-average_queue_length = sum_queue_length_observed / No
-idle_ratio = total_idle_time / T
+        average_queue_length = sum_queue_length_observed / No
+        idle_ratio = total_idle_time / T
 
-print(f"Average Queue Length: {average_queue_length}")
-print(f"Idle Ratio: {idle_ratio}")
+        return average_queue_length, idle_ratio
+
+# Usage example
+T = 500
+arrival_rate = 200.0
+average_package_length = 2000
+transmission_rate = 1000000
+K = None
+
+simulator = MM1QueueSimulator(T, arrival_rate, average_package_length, transmission_rate, K)
+print(simulator.run_simulation())
