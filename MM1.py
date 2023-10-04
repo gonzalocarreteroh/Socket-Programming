@@ -78,11 +78,8 @@ class MM1QueueSimulator:
         Nd = 0  # Number of departures
         No = 0  # Number of observers
 
-        total_idle_time = 0
+        total_idle_count = 0
         sum_queue_length_observed = 0
-
-        prev_idle = 0
-        prev_idle_time = 0
 
         for event in self.events:
             if event["type"] == "arrival":
@@ -91,30 +88,21 @@ class MM1QueueSimulator:
                 Nd += 1
             else:
                 if Na == Nd:
-                    # server is idle
-                    if prev_idle == 1:
-                        total_idle_time += event["time"] - prev_idle_time
-                    else:
-                        total_idle_time += (event["time"] - prev_idle_time) / 2
-                    prev_idle = 1
-                    prev_idle_time = event["time"]
-                else:
-                    prev_idle = 1
-                    prev_idle_time = event["time"]
-
+                    total_idle_count += 1
                 sum_queue_length_observed += abs(Na - Nd)
                 No += 1
 
         average_queue_length = sum_queue_length_observed / No
-        idle_ratio = total_idle_time / T
+        idle_ratio = total_idle_count / No
 
         return average_queue_length, idle_ratio
 
 # Usage example
 T = 500
 arrival_rate = 200.0
-average_package_length = 2000
+#average_package_length = 2000
 transmission_rate = 1000000
+average_package_length = 1.2 * transmission_rate / arrival_rate
 K = None
 
 simulator = MM1QueueSimulator(T, arrival_rate, average_package_length, transmission_rate, K)
