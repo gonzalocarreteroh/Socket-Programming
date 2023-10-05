@@ -7,12 +7,13 @@ average_packet_counts = []
 
 
 T = 1000
-arrival_rate = 200.0
+average_packet_length = 2000
 transmission_rate = 1000000
+
 K = None
 
 for rho in rhos:
-    average_packet_length = rho * transmission_rate / arrival_rate
+    arrival_rate = rho * transmission_rate / average_packet_length
     simulator = MM1QueueSimulator(T, arrival_rate, average_packet_length, transmission_rate, K)
     average_packet_counts.append(simulator.run_simulation()[0])
 

@@ -98,12 +98,12 @@ class MM1QueueSimulator:
         return average_queue_length, idle_ratio
 
 # Usage example
-T = 500
-arrival_rate = 200.0
+T = 1000
+average_package_length = 2000
 #average_package_length = 2000
 transmission_rate = 1000000
-average_package_length = 1.2 * transmission_rate / arrival_rate
+arrival_rate = 1.2 * transmission_rate / average_package_length
 K = None
 
 simulator = MM1QueueSimulator(T, arrival_rate, average_package_length, transmission_rate, K)
-#print(simulator.run_simulation())
+print(simulator.run_simulation())
