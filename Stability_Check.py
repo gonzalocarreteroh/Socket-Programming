@@ -12,8 +12,8 @@ else:
 
 
 # Values of T you want to compare
-T1 = int(input("Select the first value of T to compare with: "))
-T2 = int(input("Select the second value of T to compare with: "))
+T1 = int(input("Select the first value of T to compare with (for example K = 1000): "))
+T2 = int(input("Select the second value of T to compare with (for example K = 2000): "))
 
 average_packet_length = 2000
 transmission_rate = 1000000
