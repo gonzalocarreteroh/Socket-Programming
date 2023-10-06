@@ -2,6 +2,7 @@ import heapq
 import random
 import math
 
+
 class MM1KQueueSimulator:
     def __init__(self, T, arrival_rate, average_package_length, transmission_rate, K=None):
         self.T = T
@@ -65,7 +66,7 @@ class MM1KQueueSimulator:
                     dropped_counter += 1
                 else:
                     Na += 1
-                    
+
                     if prev_depart_time < event[0]:
                         prev_depart_time = event[0]
 
@@ -94,14 +95,14 @@ class MM1KQueueSimulator:
 
         return average_queue_length, idle_ratio, packet_loss_probability
 
-"""
-# Usage example
-T = 2000
-arrival_rate = 200.0
-average_package_length = 2000
-transmission_rate = 1000000
-K = 50
 
-simulator = MM1KQueueSimulator(T, arrival_rate, average_package_length, transmission_rate, K)
-print(simulator.run_simulation())
-"""
+if __name__ == "_main_":
+    # Usage example
+    T = 2000
+    arrival_rate = 200.0
+    average_package_length = 2000
+    transmission_rate = 1000000
+    K = 50
+
+    simulator = MM1KQueueSimulator(T, arrival_rate, average_package_length, transmission_rate, K)
+    print(simulator.run_simulation())

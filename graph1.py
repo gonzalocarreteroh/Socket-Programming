@@ -21,5 +21,5 @@ for rho in rhos:
 plt.plot(rhos, average_packet_counts)
 plt.xlabel('ρ')
 plt.ylabel('E(N)')
-plt.title('Average packet length in M/M/1 Queue')
+plt.title('Average queue length in M/M/1 Queue')
 plt.show()
