@@ -12,14 +12,19 @@ transmission_rate = 1000000
 average_packet_length = 2000
 K = None
 
+print("MM1 Plot P(idle) vs. ρ")
+
 for rho in rhos:
     arrival_rate = rho * transmission_rate / average_packet_length
     simulator = MM1QueueSimulator(T, arrival_rate, average_packet_length, transmission_rate, K)
-    average_packet_counts.append(simulator.run_simulation()[1])
+    p_idle = simulator.run_simulation()[1]
+    average_packet_counts.append(p_idle)
+    print(f"ρ = {rho}, P(idle) = {p_idle}")
 
-# Plot E[N] vs. ρ
-plt.plot(rhos, average_packet_counts)
-plt.xlabel('ρ')
-plt.ylabel('P(idle)')
-plt.title('P(idle) in M/M/1 Queue')
-plt.show()
+if __name__ == "__main__":
+    # Plot P(idle) vs. ρ
+    plt.plot(rhos, average_packet_counts)
+    plt.xlabel('ρ')
+    plt.ylabel('P(idle)')
+    plt.title('P(idle) in M/M/1 Queue')
+    plt.show()

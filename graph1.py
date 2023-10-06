@@ -12,14 +12,19 @@ transmission_rate = 1000000
 
 K = None
 
+print("MM1 Plot E[N] vs. ρ")
+
 for rho in rhos:
     arrival_rate = rho * transmission_rate / average_packet_length
     simulator = MM1QueueSimulator(T, arrival_rate, average_packet_length, transmission_rate, K)
-    average_packet_counts.append(simulator.run_simulation()[0])
+    e_n = simulator.run_simulation()[0]
+    average_packet_counts.append(e_n)
+    print(f"ρ = {rho}, E[N] = {e_n}")
 
-# Plot E[N] vs. ρ
-plt.plot(rhos, average_packet_counts)
-plt.xlabel('ρ')
-plt.ylabel('E(N)')
-plt.title('Average queue length in M/M/1 Queue')
-plt.show()
+if __name__ == "__main__":
+    # Plot E[N] vs. ρ
+    plt.plot(rhos, average_packet_counts)
+    plt.xlabel('ρ')
+    plt.ylabel('E(N)')
+    plt.title('Average queue length in M/M/1 Queue')
+    plt.show()
