@@ -1,4 +1,5 @@
 from MM1K import MM1KQueueSimulator
+from MM1 import MM1QueueSimulator
 
 simulator = input("Which simulator do you want to check the stability for (Enter MM1 or MM1K): ")
 
@@ -22,9 +23,14 @@ values2 = {}
 
 for rho in rhos:
     arrival_rate = rho * transmission_rate / average_packet_length
-    simulator1 = MM1KQueueSimulator(T1, arrival_rate, average_packet_length, transmission_rate, K)
+    if simulator == "MM1":
+       simulator1 = MM1QueueSimulator(T1, arrival_rate, average_packet_length, transmission_rate, K)
+       simulator2 = MM1QueueSimulator(T2, arrival_rate, average_packet_length, transmission_rate, K)
+    else:
+       simulator1 = MM1KQueueSimulator(T1, arrival_rate, average_packet_length, transmission_rate, K)
+       simulator2 = MM1KQueueSimulator(T2, arrival_rate, average_packet_length, transmission_rate, K)
+       
     values1[rho] = simulator1.run_simulation()
-    simulator2 = MM1KQueueSimulator(T2, arrival_rate, average_packet_length, transmission_rate, K)
     values2[rho] = simulator2.run_simulation()
 
 for r in values1.keys():
