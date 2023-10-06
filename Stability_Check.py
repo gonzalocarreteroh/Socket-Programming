@@ -62,4 +62,9 @@ for r in values1.keys():
          diff_Ploss = t2_Ploss
       else:
          diff_Ploss = 0
-  print(f"Difference between simulations for {r} is E[n]: {diff_E}%, P(idle): {diff_Pidle}%, P(loss): {diff_Ploss}%")
+
+  if (simulator == "MM1"):
+      print(f"Difference between simulations for {r} is E[n]: {round(diff_E, 3)}%, P(idle): {round(diff_Pidle,3)}%")
+  else:
+      print(f"Difference between simulations for {r} is E[n]: {round(diff_E,3)}%, P(idle): {round(diff_Pidle,3)}%, P(loss): {round(diff_Ploss,3)}%")
+
