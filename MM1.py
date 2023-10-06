@@ -97,8 +97,7 @@ class MM1QueueSimulator:
 
         return average_queue_length, idle_ratio
 
-
-if __name__ == "_main_":
+if __name__ == "__main__":
     # Usage example
     T = 1000
     average_package_length = 2000

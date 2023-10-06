@@ -61,7 +61,8 @@ class MM1KQueueSimulator:
         while self.events:
             event = heapq.heappop(self.events)
             if event[1] == "arrival":
-                if abs(Na - Nd) >= self.K:
+                if abs(Na - Nd - dropped_counter) >= self.K:
+                    Na += 1
                     # Buffer is full
                     dropped_counter += 1
                 else:
@@ -82,11 +83,11 @@ class MM1KQueueSimulator:
                 Nd += 1
 
             else:
-                if Na == Nd:
+                if Na - dropped_counter == Nd:
                     # server is idle
                     total_idle_count += 1
 
-                sum_queue_length_observed += abs(Na - Nd)
+                sum_queue_length_observed += abs(Na - dropped_counter - Nd)
                 No += 1
 
         average_queue_length = sum_queue_length_observed / No
@@ -96,7 +97,7 @@ class MM1KQueueSimulator:
         return average_queue_length, idle_ratio, packet_loss_probability
 
 
-if __name__ == "_main_":
+if __name__ == "__main__":
     # Usage example
     T = 2000
     arrival_rate = 200.0
