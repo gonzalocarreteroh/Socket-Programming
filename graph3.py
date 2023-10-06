@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 from MM1K import MM1KQueueSimulator
 
 # Simulate M/M/1/K Queue for different values of rho
@@ -30,6 +29,7 @@ for rho in rhos:
     print(f"rho = {rho}, K = 50, E[N] = {e_n3}")
 
 if __name__ == "__main__":
+    import matplotlib.pyplot as plt
     # Plot E[N] vs. rho
     plt.plot(rhos, average_packet_counts1, label = 'K = 10', color = 'blue', marker = 'o',
              markerfacecolor = 'blue', markersize = 5)

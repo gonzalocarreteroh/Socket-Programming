@@ -1,3 +1,5 @@
+PYTHON = python3
+
 # Makefile for running Python scripts
 
 # Default target when user simply runs 'make'
@@ -5,20 +7,19 @@ default: help
 
 # Define targets for running file1.py and file2.py
 print_graphs_data:
-	python print_graphs_data.py
+	$(PYTHON) print_graphs_data.py
 
 MM1:
-	python MM1.py
+	$(PYTHON) MM1.py
 
 MM1K:
-	python MM1K.py
+	$(PYTHON) MM1K.py
 
 question1:
-	python question1.py
+	$(PYTHON) python question1.py
 
 Stability_Check:
-	python Stability_Check.py
-
+	$(PYTHON) python Stability_Check.py
 
 # Help target to display usage information
 help:

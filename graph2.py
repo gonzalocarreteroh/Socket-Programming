@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 from MM1 import MM1QueueSimulator
 
 # Simulate M/M/1 Queue for different values of rho
@@ -23,6 +22,7 @@ for rho in rhos:
 
 if __name__ == "__main__":
     # Plot P(idle) vs. rho
+    import matplotlib.pyplot as plt
     plt.plot(rhos, average_packet_counts)
     plt.xlabel('rho')
     plt.ylabel('P(idle)')
