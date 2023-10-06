@@ -33,8 +33,8 @@ class MM1KQueueSimulator:
     def generate_observers(self):
 
         self.clock = 0
-        observer_average = 5 * arrival_rate
-        while self.clock < T:
+        observer_average = 5 * self.arrival_rate
+        while self.clock < self.T:
             observer_time = self.generate_exponential(observer_average)
             self.clock += observer_time
 
@@ -94,6 +94,7 @@ class MM1KQueueSimulator:
 
         return average_queue_length, idle_ratio, packet_loss_probability
 
+"""
 # Usage example
 T = 2000
 arrival_rate = 200.0
@@ -103,3 +104,4 @@ K = 50
 
 simulator = MM1KQueueSimulator(T, arrival_rate, average_package_length, transmission_rate, K)
 print(simulator.run_simulation())
+"""
