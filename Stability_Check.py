@@ -38,8 +38,9 @@ for r in values1.keys():
   t2_E = values2[r][0]
   t1_Pidle = values1[r][1]
   t2_Pidle = values2[r][1]
-  t1_Ploss = values1[r][2]
-  t2_Ploss = values2[r][2]
+  if simulator == "MM1K":
+      t1_Ploss = values1[r][2]
+      t2_Ploss = values2[r][2]
 
   if t1_E != 0:
     diff_E = (abs(t1_E - t2_E) / t1_E) * 100
@@ -53,10 +54,12 @@ for r in values1.keys():
      diff_Pidle = t2_Pidle
   else:
      diff_Pidle = 0
-  if t1_Ploss != 0:
-    diff_Ploss = (abs(t1_Ploss - t2_Ploss) / t1_Ploss) * 100
-  elif t2_Ploss != 0:
-     diff_Ploss = t2_Ploss
-  else:
-     diff_Ploss = 0
+
+  if simulator == "MM1K":
+      if t1_Ploss != 0:
+        diff_Ploss = (abs(t1_Ploss - t2_Ploss) / t1_Ploss) * 100
+      elif t2_Ploss != 0:
+         diff_Ploss = t2_Ploss
+      else:
+         diff_Ploss = 0
   print(f"Difference between simulations for {r} is E[n]: {diff_E}%, P(idle): {diff_Pidle}%, P(loss): {diff_Ploss}%")
