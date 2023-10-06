@@ -1,7 +1,6 @@
-import matplotlib.pyplot as plt
 from MM1 import MM1QueueSimulator
 
-# Simulate M/M/1 Queue for different values of ρ
+# Simulate MM1 Queue for different values of rho
 rhos = [0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95]
 average_packet_counts = []
 
@@ -12,19 +11,20 @@ transmission_rate = 1000000
 
 K = None
 
-print("MM1 Plot E[N] vs. ρ")
+print("MM1 Plot E[N] vs. rho")
 
 for rho in rhos:
     arrival_rate = rho * transmission_rate / average_packet_length
     simulator = MM1QueueSimulator(T, arrival_rate, average_packet_length, transmission_rate, K)
     e_n = simulator.run_simulation()[0]
     average_packet_counts.append(e_n)
-    print(f"ρ = {rho}, E[N] = {e_n}")
+    print("rho = " + str(rho) + ", E[N] = " + str(e_n))
 
 if __name__ == "__main__":
-    # Plot E[N] vs. ρ
+    import matplotlib.pyplot as plt
+    # Plot E[N] vs. rho
     plt.plot(rhos, average_packet_counts)
-    plt.xlabel('ρ')
+    plt.xlabel('rho')
     plt.ylabel('E(N)')
     plt.title('Average queue length in M/M/1 Queue')
     plt.show()
