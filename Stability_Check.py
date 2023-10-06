@@ -25,8 +25,8 @@ values2 = {}
 for rho in rhos:
     arrival_rate = rho * transmission_rate / average_packet_length
     if simulator == "MM1":
-       simulator1 = MM1QueueSimulator(T1, arrival_rate, average_packet_length, transmission_rate, K)
-       simulator2 = MM1QueueSimulator(T2, arrival_rate, average_packet_length, transmission_rate, K)
+       simulator1 = MM1QueueSimulator(T1, arrival_rate, average_packet_length, transmission_rate)
+       simulator2 = MM1QueueSimulator(T2, arrival_rate, average_packet_length, transmission_rate)
     elif simulator == "MM1K":
        simulator1 = MM1KQueueSimulator(T1, arrival_rate, average_packet_length, transmission_rate, K)
        simulator2 = MM1KQueueSimulator(T2, arrival_rate, average_packet_length, transmission_rate, K)
