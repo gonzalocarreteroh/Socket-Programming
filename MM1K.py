@@ -45,7 +45,6 @@ class MM1KQueueSimulator:
 
     def run_simulation(self):
         self.generate_packet_arrivals()
-        total_packets = len(self.events)
 
         self.generate_observers()
 
@@ -92,7 +91,7 @@ class MM1KQueueSimulator:
 
         average_queue_length = sum_queue_length_observed / No
         idle_ratio = total_idle_count / No
-        packet_loss_probability = dropped_counter / total_packets
+        packet_loss_probability = dropped_counter / Na
 
         return average_queue_length, idle_ratio, packet_loss_probability
 
@@ -100,7 +99,7 @@ class MM1KQueueSimulator:
 if __name__ == "__main__":
     # Usage example
     T = 2000
-    arrival_rate = 200.0
+    arrival_rate = 1.5 * 1000000 / 2000
     average_package_length = 2000
     transmission_rate = 1000000
     K = 50
