@@ -58,8 +58,8 @@ class MM1QueueSimulator:
     def generate_observers(self):
 
         self.clock = 0
-        observer_average = 5 * arrival_rate
-        while self.clock < T:
+        observer_average = 5 * self.arrival_rate
+        while self.clock < self.T:
             observer_time = self.generate_exponential(observer_average)
             self.clock += observer_time
 
