@@ -8,6 +8,8 @@ Gonzalo Carretero gcarrete@uwaterloo.ca 21111901
 
 cd ECE358
 
+install #-> install the required packages
+
 make #->it displays the options
 
 make print_graphs_data #-> print the data from which the graphs are generated
