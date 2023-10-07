@@ -10,7 +10,7 @@ cd ECE358
 
 make #->it displays the options
 
-make print_graphs_data #-> print the data from which the graphs are generate
+make print_graphs_data #-> print the data from which the graphs are generated
 
 make MM1 #-> run the MM1 simulator with a example input set with rho = 1.2
 
