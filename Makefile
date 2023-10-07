@@ -1,5 +1,4 @@
 PYTHON = python3
-
 # Makefile for running Python scripts
 
 # Default target when user simply runs 'make'
@@ -35,5 +34,6 @@ help:
 
 install:
 	pip install -r requirements.txt
+
 # Allow the user to specify a target as an argument to 'make'
 .PHONY: install print_graphs_data MM1 MM1K question1 Stability_Check help
