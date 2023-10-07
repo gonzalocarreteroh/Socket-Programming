@@ -16,10 +16,10 @@ MM1K:
 	$(PYTHON) MM1K.py
 
 question1:
-	$(PYTHON) python question1.py
+	$(PYTHON) question1.py
 
 Stability_Check:
-	$(PYTHON) python Stability_Check.py
+	$(PYTHON) Stability_Check.py
 
 # Help target to display usage information
 help:
