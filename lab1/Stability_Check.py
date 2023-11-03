@@ -1,5 +1,5 @@
-from MM1K import MM1KQueueSimulator
-from MM1 import MM1QueueSimulator
+from lab1.MM1K import MM1KQueueSimulator
+from lab1.MM1 import MM1QueueSimulator
 
 simulator = input("Which simulator do you want to check the stability for (Enter MM1 or MM1K): ")
 
