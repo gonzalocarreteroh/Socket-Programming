@@ -36,7 +36,7 @@ def get_modified_date(file_name):
     # Return format of the last modified time
     return format_date(last_modified_time)
 
-def create_response(request_type, status_code, content_type, data):
+def create_response(request_type, status_code, content_type, data, file_name):
     # Headers: Connection, Date, Server, Last-Modified, Content-Length and Content-Type
     response = f"HTTP/1.1 {status_code}\n"
     response += "Connection: keep-alive\n"
@@ -44,12 +44,17 @@ def create_response(request_type, status_code, content_type, data):
     date = get_current_date()
     response += f"Date: {date}\n"
     response += "Server: Python/3.8\n"
-    response += "Last-Modified: Sun, 18 Oct 2020 15:00:00 GMT\n"
-    response += f"Content-Length: {len(data)}\n"
-    response += f"Content-Type: {content_type}\n\n"
+    if status_code == "404 Not Found":
+        # End header if status code is 404
+        response += "\n"
+    if status_code == "200 OK":
+        response += f"Last-Modified: {get_modified_date(file_name[1:])}\n"
+        response += f"Content-Length: {len(data)}\n"
+        response += f"Content-Type: {content_type}\n\n"
+    print(response)
     response = response.encode('utf-8') 
     # Only add the file data if the request type is GET and not HEAD
-    if request_type == "GET":
+    if request_type == "GET" and status_code == "200 OK":
         response += data
     return response
 
@@ -66,15 +71,14 @@ def handle_request(client_socket):
         file = open(file_name[1:], 'rb')
         data = file.read()
         file.close()
-        if request_type == "GET":
-            response = create_response("GET", "200 OK", "text/html", data)
-        elif request_type == "HEAD":
-            response = create_response("HEAD", "200 OK", "text/html", data)
+        response = create_response(request_type, "200 OK", "text/html", data, file_name)
+        response = create_response(request_type, "200 OK", "text/html", data, file_name)
         client_socket.send(response)
     except FileNotFoundError:
         # This is not finished yet
-        # response = create_response("404 Not Found", "text/html", b"<h1>404 Not Found</h1>")
-        pass
+        print("File not found")
+        response = create_response(request_type, "404 Not Found", "text/html", b"<h1>404 Not Found</h1>", file_name)
+        client_socket.send(response)
         
 
 
@@ -85,8 +89,7 @@ serverSocket.bind(("127.0.0.1", serverPort))
 serverSocket.listen(1)
 print ("The server is ready to receive")
 while True:
-    # Write http://127.0.0.1:11000/HelloWorld.html on web browser
-    # Server will detect the request and print the addr from client
+    # http://127.0.0.1:11000/HelloWorld.html 
     connectionSocket, addr = serverSocket.accept()
 
     handle_request(connectionSocket)
