@@ -51,7 +51,6 @@ def create_response(request_type, status_code, content_type, data, file_name):
         response += f"Last-Modified: {get_modified_date(file_name[1:])}\n"
         response += f"Content-Length: {len(data)}\n"
         response += f"Content-Type: {content_type}\n\n"
-    print(response)
     response = response.encode('utf-8') 
     # Only add the file data if the request type is GET and not HEAD
     if request_type == "GET" and status_code == "200 OK":
@@ -73,13 +72,10 @@ def handle_request(client_socket):
         file.close()
         response = create_response(request_type, "200 OK", "text/html", data, file_name)
         response = create_response(request_type, "200 OK", "text/html", data, file_name)
-        client_socket.send(response)
+        client_socket.sendall(response)
     except FileNotFoundError:
-        # This is not finished yet
-        print("File not found")
         response = create_response(request_type, "404 Not Found", "text/html", b"<h1>404 Not Found</h1>", file_name)
-        client_socket.send(response)
-        
+        client_socket.sendall(response)
 
 
 # Create a TCP socket
