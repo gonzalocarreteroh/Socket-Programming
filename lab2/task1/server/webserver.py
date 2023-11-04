@@ -36,7 +36,7 @@ def get_modified_date(file_name):
     # Return format of the last modified time
     return format_date(last_modified_time)
 
-def create_response(status_code, content_type, data):
+def create_response(request_type, status_code, content_type, data):
     # Headers: Connection, Date, Server, Last-Modified, Content-Length and Content-Type
     response = f"HTTP/1.1 {status_code}\n"
     response += "Connection: keep-alive\n"
@@ -47,8 +47,10 @@ def create_response(status_code, content_type, data):
     response += "Last-Modified: Sun, 18 Oct 2020 15:00:00 GMT\n"
     response += f"Content-Length: {len(data)}\n"
     response += f"Content-Type: {content_type}\n\n"
-    print(f"Sending client:\nHeaders ->\n{response}\nData ->\n{data}")
-    response = response.encode('utf-8') + data
+    response = response.encode('utf-8') 
+    # Only add the file data if the request type is GET and not HEAD
+    if request_type == "GET":
+        response += data
     return response
 
 def handle_request(client_socket):
@@ -65,8 +67,10 @@ def handle_request(client_socket):
         data = file.read()
         file.close()
         if request_type == "GET":
-            response = create_response("200 OK", "text/html", data)
-            client_socket.send(response)
+            response = create_response("GET", "200 OK", "text/html", data)
+        elif request_type == "HEAD":
+            response = create_response("HEAD", "200 OK", "text/html", data)
+        client_socket.send(response)
     except FileNotFoundError:
         # This is not finished yet
         # response = create_response("404 Not Found", "text/html", b"<h1>404 Not Found</h1>")
