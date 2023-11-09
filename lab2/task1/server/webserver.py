@@ -67,6 +67,8 @@ def handle_request(client_socket):
 
     # Open the file
     try:
+        if file_name == "/":
+            file_name = "/HelloWorld.html"
         file = open(file_name[1:], 'rb')
         data = file.read()
         file.close()
