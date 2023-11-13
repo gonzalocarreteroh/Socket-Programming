@@ -44,16 +44,15 @@ def create_response(request_type, status_code, content_type, data, file_name):
     date = get_current_date()
     response += f"Date: {date}\n"
     response += "Server: Python/3.8\n"
-    if status_code == "404 Not Found":
-        # End header if status code is 404
-        response += "\n"
     if status_code == "200 OK":
         response += f"Last-Modified: {get_modified_date(file_name[1:])}\n"
-        response += f"Content-Length: {len(data)}\n"
-        response += f"Content-Type: {content_type}\n\n"
+    else:
+        response += f"Last-Modified: {date}\n"
+    response += f"Content-Length: {len(data)}\n"
+    response += f"Content-Type: {content_type}\n\n"
     response = response.encode('utf-8') 
-    # Only add the file data if the request type is GET and not HEAD
-    if request_type == "GET" and status_code == "200 OK":
+    # Only add file data if the request type is not HEAD
+    if request_type != "HEAD":
         response += data
     return response
 
@@ -68,14 +67,19 @@ def handle_request(client_socket):
     # Open the file
     try:
         if file_name == "/":
+            # Default file in same dir as server
             file_name = "/HelloWorld.html"
+        # Try to open the file
         file = open(file_name[1:], 'rb')
+        # Read the file content
         data = file.read()
         file.close()
+        # Create response
         response = create_response(request_type, "200 OK", "text/html", data, file_name)
-        response = create_response(request_type, "200 OK", "text/html", data, file_name)
+        # Send response to client
         client_socket.sendall(response)
     except FileNotFoundError:
+        # Create a 404 response
         response = create_response(request_type, "404 Not Found", "text/html", b"<h1>404 Not Found</h1>", file_name)
         client_socket.sendall(response)
 
@@ -87,8 +91,9 @@ serverSocket.bind(("127.0.0.1", serverPort))
 serverSocket.listen(1)
 print ("The server is ready to receive")
 while True:
-    # http://127.0.0.1:11000/HelloWorld.html 
+    # Receive new connection
     connectionSocket, addr = serverSocket.accept()
-
     handle_request(connectionSocket)
+
+    # Close the connection since the client will close the connection after one request
     connectionSocket.close()
