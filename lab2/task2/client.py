@@ -10,6 +10,7 @@ server_address = ("127.0.0.1", 12001)
 while True:
     print("Input from the User:")
     domain_name = input("> Enter Domain Name: ")
+    domain_name = domain_name.lower()
 
     if domain_name == "end":
         print("Session ended")
@@ -24,6 +25,9 @@ while True:
     # Receive the DNS response from the server
     response, _ = client_socket.recvfrom(2048)
     response = response.decode()
+    if response == "Domain not found":
+        print(response)
+        continue
     print("Output:")
     response_object = util.extract_answer_section(response)
 
