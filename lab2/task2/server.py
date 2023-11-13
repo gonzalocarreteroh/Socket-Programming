@@ -8,31 +8,25 @@ server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 server_address = ("127.0.0.1", 12001)
 server_socket.bind(server_address)
 
-def extract_domain(query):
-    start_i = query.index("-")
-    domain = ""
-    start = start_i + 4
-    for i in range(int(query[start_i + 1:start_i + 3], 16)):
-        char = query[start:start + 2]
-        print(char)
-        domain += chr(int(char, 16))
-        start += 3
-    domain += "."
-    start_2 = start + 3
-    for i in range(int(query[start:start + 2], 16)):
-        char = query[start_2:start_2 + 2]
-        domain += chr(int(char, 16))
-        start_2 += 3
-    return domain
-
 while True:
     # Wait for a DNS query from the client
-    data, client_address = server_socket.recvfrom(1024)
+    data, client_address = server_socket.recvfrom(2048)
     query = data.decode()
 
-    domain = extract_domain(query)
+    domain = util.extract_domain(query)
 
-    # Create a DNS response
-    response_data = util.generate_dns_header(False, len(util.dns_records[domain][3:])) + "-" + util.create_question_section(domain) + "-" + util.create_answer_section(domain)
+    response_data = ""
+    if domain in util.dns_records.keys():
+        # Create a DNS response
+        response_data = "Header " + util.generate_dns_header(response=True, ancount=len(
+            util.dns_records[domain][3:]), query_id=int(query[7:9] + query[10:12], 16)) + "\nQuestion " + util.create_question_section(domain) + "\nAnswer " + util.create_answer_section(
+            domain)
+    else:
+        response_data = "Domain not found"
+
+    print("Request:")
+    print(query)
+    print("Response:")
+    print(response_data)
 
     server_socket.sendto(response_data.encode(), client_address)
