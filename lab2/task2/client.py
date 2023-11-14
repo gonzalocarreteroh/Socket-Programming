@@ -17,20 +17,27 @@ while True:
         client_socket.close()
         break
 
-    query_message = "Header " + util.generate_dns_header(response=False, ancount=0) + "\nQuestion " + util.create_question_section(
+    # Construct the DNS query message
+    query_message = "Header " + util.generate_dns_header(response=False,
+                                                         ancount=0) + "\nQuestion " + util.create_question_section(
         domain_name)
+
     # Send the DNS query to the server
     client_socket.sendto(query_message.encode(), server_address)
 
     # Receive the DNS response from the server
     response, _ = client_socket.recvfrom(2048)
     response = response.decode()
+
+    # Check if the domain is not found
     if response == "Domain not found":
         print(response)
         continue
+
     print("Output:")
     response_object = util.extract_answer_section(response)
 
+    # Display the DNS response information
     for ans in response_object:
         print(
             domain_name + ": " + "type " + ans["type"] + ", class " + ans["class"] + ", ttl " + str(ans["ttl"]) + " (" +

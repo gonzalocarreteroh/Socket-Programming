@@ -1,5 +1,9 @@
 import random
 
+# This function generates a DNS header based on the provided arguments.
+# The response argument is a boolean that indicates whether the header is for a query or a response.
+# The ancount argument is the number of resource records in the answer section.
+# The query_id argument is the ID of the query that the response is for.
 def generate_dns_header(response=False, ancount=0, query_id=0):
 
     header = ""
@@ -84,6 +88,7 @@ def generate_dns_header(response=False, ancount=0, query_id=0):
 
     return header_bytes[:-1]
 
+# This function creates a question section based on the provided query domain.
 def create_question_section(query_domain):
     qname = ""
     for part in query_domain.split("."):
@@ -106,6 +111,7 @@ def create_question_section(query_domain):
 
 import socket
 
+# This function creates an answer section based on the provided domain name.
 def create_answer_section(domain_name):
     answer = ""
 
@@ -139,6 +145,7 @@ def create_answer_section(domain_name):
     else:
         return answer  # Empty answer section for non-existent domains
 
+# This is a dictionary of DNS records.
 dns_records = {
     "google.com": ["A", "IN", 260, "192.165.1.1", "192.165.1.10"],
     "youtube.com": ["A", "IN", 160, "192.165.1.2"],
@@ -148,6 +155,7 @@ dns_records = {
 }
 
 
+# This function extracts the answer section from the provided query.
 def extract_answer_section(query):
 
     l = []
@@ -196,6 +204,7 @@ def extract_answer_section(query):
     return l
 
 
+# This function extracts the domain name from the provided query.
 def extract_domain(query):
     start_i = query.index("Question ")
     domain = ""

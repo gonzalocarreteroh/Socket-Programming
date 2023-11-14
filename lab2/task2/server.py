@@ -13,8 +13,10 @@ while True:
     data, client_address = server_socket.recvfrom(2048)
     query = data.decode()
 
+    # Extract the domain from the DNS query
     domain = util.extract_domain(query)
 
+    # Check if the domain is in the DNS records
     response_data = ""
     if domain in util.dns_records.keys():
         # Create a DNS response
@@ -24,9 +26,11 @@ while True:
     else:
         response_data = "Domain not found"
 
+    # Print the request and response for debugging purposes
     print("Request:")
     print(query)
     print("Response:")
     print(response_data)
 
+    # Send the DNS response back to the client
     server_socket.sendto(response_data.encode(), client_address)
