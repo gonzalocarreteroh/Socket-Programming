@@ -6,6 +6,6 @@ To execute the program, run webserver.py and then make GET or HEAD request using
 To terminate the program click on the terminal running the code and press the keys ctrl + c in your keyboard.
 
 
-This repository contains three Python files that together create a simple DNS resolver system using UDP sockets. The system consists of a server (server.py), a client (client.py), and a utility module (util.py) with functions for generating DNS headers, creating question and answer sections, and extracting domain information from DNS queries.
+Task 2 repository contains three Python files that together create a simple DNS resolver system using UDP sockets. The system consists of a server (server.py), a client (client.py), and a utility module (util.py) with functions for generating DNS headers, creating question and answer sections, and extracting domain information from DNS queries.
 
 To execute the program, run client.py and server.py on separate terminals. The client will prompt the user for a domain name and a DNS server address. The client will then send a DNS query to the server, which will respond with a DNS response. The client will then print the response to the terminal.
