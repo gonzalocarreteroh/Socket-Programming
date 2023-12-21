@@ -1,4 +1,4 @@
-These projects were done by [@JHCuc3m](https://github.com/JHCuc3m) and me for our Computer Networks course during the Fall 2023 term at UW.
+These projects were done by [@JHCuc3m](https://github.com/JHCuc3m) and [@gonzalocarreterohdz](https://github.com/gonzalocarreterohdz) for our Computer Networks course during the Fall 2023 term at UW.
 
 **Lab 1: M/M/1 and M/M/1/K Queue
 Simulation**
