@@ -6,4 +6,4 @@ Simulation**
 
 
 **Lab 2: Socket Programming using Python**
-(Grade: 96) 
+(Grade: 96)
